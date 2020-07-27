@@ -16,3 +16,8 @@ body {
     left: 0;
     background-color: red;
 }
+
+#ball {
+    position: absolute;
+    background-color: green;
+}
