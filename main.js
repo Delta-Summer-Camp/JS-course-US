@@ -5,10 +5,9 @@ const STEP = 10;
 const GA_SIZE = 800;
 const SQ_SIZE = 30;
 const BL_SIZE = 20;
-let bx = 200;
-let by = 150;
-let bvx;
-let bvy;
+let bx, by; // положение мячика
+let bvx, bvy; // скорость мячика
+let sqx, sqy; // положение ракетки
 const VMIN = 5;
 const VMAX = 20;
 const BL_TIME = 100;
@@ -17,17 +16,24 @@ let isMoving = false;
 
 
 function init() {
-    square.style.width = square.style.height = SQ_SIZE + 'px';
     const ga = document.getElementById('gameArea');
     ga.style.width = ga.style.height = GA_SIZE + 'px';
+
+    bvx = Math.floor((Math.random() * (VMAX - VMIN)) + VMIN);
+    bvy = Math.floor((Math.random() * (VMAX - VMIN)) + VMIN);
+
+    bvx = (Math.random() < 0.5) ? -bvx : bvx;
+    bvy = (Math.random() < 0.5) ? -bvy : bvy;
+
+    bx = Math.floor(Math.random() * (GA_SIZE - BL_SIZE));
+    by = Math.floor(Math.random() * (GA_SIZE - BL_SIZE));
+
+    square.style.width = square.style.height = SQ_SIZE + 'px';
 
     bl.style.height = bl.style.width = BL_SIZE + 'px';
     bl.style.left = bx + 'px';
     bl.style.top = by + 'px';
     bl.style.borderRadius = Math.floor(BL_SIZE / 2) + 'px';
-
-    bvx = Math.floor((Math.random() * (VMAX - VMIN)) + VMIN);
-    bvy = Math.floor((Math.random() * (VMAX - VMIN)) + VMIN);
 }
 
 function getKey(event) {
@@ -36,35 +42,37 @@ function getKey(event) {
         isMoving = true;
     }
 
-    let x = square.offsetLeft;
-    let y = square.offsetTop;
+    sqx = square.offsetLeft;
+    sqy = square.offsetTop;
 
     let key = event.keyCode;
 
     switch (key) {
         case 37: // left
-            x -= STEP;
+            sqx -= STEP;
             break;
         case 38: // up
-            y -= STEP;
+            sqy -= STEP;
             break;
         case 39: // right
-            x += STEP;
+            sqx += STEP;
             break;
         case 40: // down
-            y += STEP;
+            sqy += STEP;
             break;
         default:
             return false;
     }
 
-    if (x < 0) x = 0;
-    else if (x > GA_SIZE - SQ_SIZE) x = GA_SIZE - SQ_SIZE;
-    if (y < 0) y = 0;
-    else if (y > GA_SIZE - SQ_SIZE) y = GA_SIZE - SQ_SIZE;
+    if (sqx < 0) sqx = 0;
+    else if (sqx > GA_SIZE - SQ_SIZE) sqx = GA_SIZE - SQ_SIZE;
+    if (sqy < 0) sqy = 0;
+    else if (sqy > GA_SIZE - SQ_SIZE) sqy = GA_SIZE - SQ_SIZE;
 
-    square.style.left = x + 'px';
-    square.style.top = y + 'px';
+    square.style.left = sqx + 'px';
+    square.style.top = sqy + 'px';
+
+    chkStrike();
 }
 
 function moveTheBall() {
@@ -88,4 +96,16 @@ function moveTheBall() {
 
     bl.style.left = bx + 'px';
     bl.style.top = by + 'px';
+
+    chkStrike();
+}
+
+// Проверка соударения ракетки и мячика
+function chkStrike() {
+    if (Math.abs((sqx + SQ_SIZE / 2) - (bx + BL_SIZE / 2)) < (SQ_SIZE / 2 + BL_SIZE / 2) &&
+        Math.abs((sqy + SQ_SIZE / 2) - (by + BL_SIZE / 2)) < (SQ_SIZE / 2 + BL_SIZE / 2)) doStrike();
+}
+
+function doStrike() {
+    alert ("Strike!!!");
 }
