@@ -13,6 +13,7 @@ const VMAX = 20;
 const BL_TIME = 100;
 const bl = document.getElementById('ball');
 let isMoving = false;
+let score = 0;
 
 
 function init() {
@@ -102,10 +103,23 @@ function moveTheBall() {
 
 // Проверка соударения ракетки и мячика
 function chkStrike() {
+    // ToDo: определить направление удара!
     if (Math.abs((sqx + SQ_SIZE / 2) - (bx + BL_SIZE / 2)) < (SQ_SIZE / 2 + BL_SIZE / 2) &&
         Math.abs((sqy + SQ_SIZE / 2) - (by + BL_SIZE / 2)) < (SQ_SIZE / 2 + BL_SIZE / 2)) doStrike();
 }
 
-function doStrike() {
-    alert ("Strike!!!");
+// side - указатель, с какой стороны ракетры произошёл удар: l, r, t, b
+function doStrike(side) {
+    switch (side) {
+        case 'l':
+        case 'r':
+            bvx = -bvx;
+            break;
+        case 't':
+        case 'b':
+            bvy = -bvy;
+            break;
+    }
+    score++;
+    document.getElementById('score').innerText = 'Score: ' + score;
 }

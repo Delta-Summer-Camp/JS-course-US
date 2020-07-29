@@ -21,3 +21,12 @@ body {
     position: absolute;
     background-color: green;
 }
+
+#score {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    font-size: large;
+    color: darkmagenta;
+    font-weight: bold;
+}
