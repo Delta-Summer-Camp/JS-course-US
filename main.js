@@ -1,16 +1,16 @@
 const square = document.getElementById('square');
 document.addEventListener('keydown', getKey);
 
-const STEP = 10;
+const STEP = 5;
 const GA_SIZE = 800;
-const SQ_SIZE = 30;
-const BL_SIZE = 20;
+const SQ_SIZE = 300;
+const BL_SIZE = 30;
 let bx, by; // положение мячика
 let bvx, bvy; // скорость мячика
 let sqx, sqy; // положение ракетки
 const VMIN = 5;
 const VMAX = 20;
-const BL_TIME = 100;
+const BL_TIME = 50;
 const bl = document.getElementById('ball');
 let isMoving = false;
 let score = 0;
@@ -103,21 +103,38 @@ function moveTheBall() {
 
 // Проверка соударения ракетки и мячика
 function chkStrike() {
-    // ToDo: определить направление удара!
-    if (Math.abs((sqx + SQ_SIZE / 2) - (bx + BL_SIZE / 2)) < (SQ_SIZE / 2 + BL_SIZE / 2) &&
-        Math.abs((sqy + SQ_SIZE / 2) - (by + BL_SIZE / 2)) < (SQ_SIZE / 2 + BL_SIZE / 2)) doStrike();
+    const xDistance = (sqx + SQ_SIZE / 2) - (bx + BL_SIZE / 2);
+    const yDistance = (sqy + SQ_SIZE / 2) - (by + BL_SIZE / 2);
+    if (Math.abs(xDistance) <= ((SQ_SIZE + BL_SIZE) / 2) &&
+        Math.abs(yDistance) <= ((SQ_SIZE + BL_SIZE) / 2)) {
+        if (Math.abs (yDistance) < Math.abs(xDistance) && Math.abs(yDistance) < ((SQ_SIZE + BL_SIZE) / 2)) { // Столкновение по горизонтали
+            if (xDistance < 0) doStrike('r');
+            else doStrike('l');
+        } else { // Столкновение по вертикали
+            if (yDistance < 0 ) doStrike('b');
+            else doStrike('t');
+        }
+    }
 }
 
 // side - указатель, с какой стороны ракетры произошёл удар: l, r, t, b
 function doStrike(side) {
     switch (side) {
         case 'l':
-        case 'r':
-            bvx = -bvx;
+            bvx = -1 * Math.abs(bvx);
+            bx = sqx - BL_SIZE;
+            if (bx < 0) bx = 0;
             break;
-        case 't':
+        case 'r':
+            bvx = Math.abs(bvx);
+            bx = sqx + SQ_SIZE;
+            if (bx > GA_SIZE - BL_SIZE) bx = GA_SIZE - BL_SIZE;
+            break;
+        case 't': // ToDo: доделать!
+            bvy = -1 * Math.abs(bvy);
+            break;
         case 'b':
-            bvy = -bvy;
+            bvy = Math.abs(bvy);
             break;
     }
     score++;
