@@ -3,7 +3,8 @@ document.addEventListener('keydown', getKey);
 
 const STEP = 5;
 const GA_SIZE = 800;
-const SQ_SIZE = 300;
+const SQ_X = 250;
+const SQ_Y = 30;
 const BL_SIZE = 30;
 let bx, by; // положение мячика
 let bvx, bvy; // скорость мячика
@@ -29,12 +30,15 @@ function init() {
     bx = Math.floor(Math.random() * (GA_SIZE - BL_SIZE));
     by = Math.floor(Math.random() * (GA_SIZE - BL_SIZE));
 
-    square.style.width = square.style.height = SQ_SIZE + 'px';
-
     bl.style.height = bl.style.width = BL_SIZE + 'px';
     bl.style.left = bx + 'px';
     bl.style.top = by + 'px';
     bl.style.borderRadius = Math.floor(BL_SIZE / 2) + 'px';
+
+    square.style.width = SQ_X + 'px';
+    square.style.height = SQ_Y + 'px';
+    square.style.borderRadius = Math.floor(SQ_Y / 2) + 'px';
+
 }
 
 function getKey(event) {
@@ -66,9 +70,9 @@ function getKey(event) {
     }
 
     if (sqx < 0) sqx = 0;
-    else if (sqx > GA_SIZE - SQ_SIZE) sqx = GA_SIZE - SQ_SIZE;
+    else if (sqx > GA_SIZE - SQ_X) sqx = GA_SIZE - SQ_X;
     if (sqy < 0) sqy = 0;
-    else if (sqy > GA_SIZE - SQ_SIZE) sqy = GA_SIZE - SQ_SIZE;
+    else if (sqy > GA_SIZE - SQ_Y) sqy = GA_SIZE - SQ_Y;
 
     square.style.left = sqx + 'px';
     square.style.top = sqy + 'px';
@@ -103,11 +107,11 @@ function moveTheBall() {
 
 // Проверка соударения ракетки и мячика
 function chkStrike() {
-    const xDistance = (sqx + SQ_SIZE / 2) - (bx + BL_SIZE / 2);
-    const yDistance = (sqy + SQ_SIZE / 2) - (by + BL_SIZE / 2);
-    if (Math.abs(xDistance) <= ((SQ_SIZE + BL_SIZE) / 2) &&
-        Math.abs(yDistance) <= ((SQ_SIZE + BL_SIZE) / 2)) {
-        if (Math.abs (yDistance) < Math.abs(xDistance) && Math.abs(yDistance) < ((SQ_SIZE + BL_SIZE) / 2)) { // Столкновение по горизонтали
+    const xDistance = (sqx + SQ_X / 2) - (bx + BL_SIZE / 2);
+    const yDistance = (sqy + SQ_Y / 2) - (by + BL_SIZE / 2);
+    if (Math.abs(xDistance) <= ((SQ_X + BL_SIZE) / 2) &&
+        Math.abs(yDistance) <= ((SQ_Y + BL_SIZE) / 2)) {
+        if ((SQ_X / 2 - xDistance) < 0 && Math.abs(yDistance) < ((SQ_Y + BL_SIZE) / 2)) { // Столкновение по горизонтали
             if (xDistance < 0) doStrike('r');
             else doStrike('l');
         } else { // Столкновение по вертикали
@@ -127,14 +131,18 @@ function doStrike(side) {
             break;
         case 'r':
             bvx = Math.abs(bvx);
-            bx = sqx + SQ_SIZE;
+            bx = sqx + SQ_X;
             if (bx > GA_SIZE - BL_SIZE) bx = GA_SIZE - BL_SIZE;
             break;
-        case 't': // ToDo: доделать!
+        case 't':
             bvy = -1 * Math.abs(bvy);
+            by = sqy - BL_SIZE;
+            if (by < 0) by = 0;
             break;
         case 'b':
             bvy = Math.abs(bvy);
+            by = sqy + SQ_Y;
+            if (by > GA_SIZE - BL_SIZE) by = GA_SIZE - BL_SIZE;
             break;
     }
     score++;
