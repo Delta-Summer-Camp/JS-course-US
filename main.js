@@ -1,7 +1,7 @@
 const square = document.getElementById('square');
 document.addEventListener('keydown', getKey);
 
-const STEP = 5;
+const STEP = 10;
 const GA_SIZE = 800;
 const SQ_X = 250;
 const SQ_Y = 30;
@@ -12,6 +12,7 @@ let sqx, sqy; // положение ракетки
 const VMIN = 5;
 const VMAX = 20;
 const BL_TIME = 50;
+const BOOST = 1.05;
 const bl = document.getElementById('ball');
 let isMoving = false;
 let score = 0;
@@ -38,7 +39,8 @@ function init() {
     square.style.width = SQ_X + 'px';
     square.style.height = SQ_Y + 'px';
     square.style.borderRadius = Math.floor(SQ_Y / 2) + 'px';
-
+    square.style.bottom = '0';
+    square.style.left = Math.floor((GA_SIZE - SQ_X) / 2) + 'px'
 }
 
 function getKey(event) {
@@ -97,6 +99,7 @@ function moveTheBall() {
     } else if (by > GA_SIZE - BL_SIZE) {
         by = GA_SIZE - BL_SIZE;
         bvy *= -1;
+        alert('Game over!');
     }
 
     bl.style.left = bx + 'px';
@@ -135,7 +138,7 @@ function doStrike(side) {
             if (bx > GA_SIZE - BL_SIZE) bx = GA_SIZE - BL_SIZE;
             break;
         case 't':
-            bvy = -1 * Math.abs(bvy);
+            bvy = -1 * Math.abs(bvy * BOOST);
             by = sqy - BL_SIZE;
             if (by < 0) by = 0;
             break;

@@ -1,27 +1,24 @@
+* {
+    background-color: lightblue;
+}
 body {
     margin: 0;
-    padding: 0;
-}
-
+    padding: 0;}
 #gameArea {
     position: fixed;
     top: 30px;
     left: 30px;
-    border: darkblue 1px solid;
+    border: wheat 3px solid;
+    background-color: darkgreen;
 }
-
 #square {
     position: absolute;
-    top: 0;
-    left: 0;
-    background-color: red;
+    background-color: black;
 }
-
 #ball {
     position: absolute;
-    background-color: green;
+    background-color: white;
 }
-
 #score {
     position: fixed;
     top: 30px;
@@ -29,4 +26,6 @@ body {
     font-size: large;
     color: darkmagenta;
     font-weight: bold;
+    font-family: "Book Antiqua", serif;
+    border: blue 5px solid;
 }
